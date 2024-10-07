@@ -19,6 +19,7 @@ const foodreq = require('./routes/foodreq');
 const mail = require('./routes/mail');
 const report = require('./routes/report');
 const payments = require('./routes/payment');
+const { getReportCounts } = require('./trigger/propertyFunction');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -49,5 +50,7 @@ app.use('/api/payments', payments);
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
+
+setInterval(getReportCounts, 5 * 1000);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
