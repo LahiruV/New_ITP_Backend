@@ -22,10 +22,9 @@ async function getReportCounts() {
             if (reportCounts[x].count > 4) {
                 const propertyID = reportCounts[x].propertyID;
                 await deleteProperty(propertyID);
+                await deleteReport(propertyID);
             }
         }
-
-        console.log('Report counts processed:', reportCounts);
     } catch (error) {
         console.error('Error fetching report counts:', error);
     }
@@ -33,14 +32,17 @@ async function getReportCounts() {
 
 async function deleteProperty(propertyID) {
     try {
-        const deletedProperty = await Property.findByIdAndDelete(propertyID);
-        if (!deletedProperty) {
-            console.log(`Property with ID ${propertyID} not found`);
-        } else {
-            console.log(`Property with ID ${propertyID} deleted successfully`);
-        }
+        await Property.findByIdAndDelete(propertyID);
     } catch (error) {
         console.error(`Error deleting property with ID ${propertyID}:`, error);
+    }
+}
+
+async function deleteReport(reportID) {
+    try {
+        await Report.findOneAndDelete(reportID);
+    } catch (error) {
+        console.error(`Error deleting report with ID ${reportID}:`, error);
     }
 }
 
